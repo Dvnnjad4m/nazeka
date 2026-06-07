@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ellooou na(na)zka!</title>
+    <!-- Memuat Font Google Courier Prime, Inter, dan Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fa;
+            background-image: radial-gradient(rgba(129, 159, 127, 0.15) 1px, transparent 0);
+            background-size: 24px 24px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 16px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* --- Wadah Efek Cahaya Berpendar (Floating Blobs) --- */
+        .blob-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.35;
+            mix-blend-mode: multiply;
+            animation: floatBlobs 8s infinite ease-in-out;
+        }
+
+        .blob-1 {
+            width: 300px;
+            height: 300px;
+            background-color: #819f7f;
+            top: -50px;
+            left: -50px;
+        }
+
+        .blob-2 {
+            width: 280px;
+            height: 280px;
+            background-color: #c084fc;
+            bottom: -50px;
+            right: -50px;
+            animation-delay: 2s;
+        }
+
+        @keyframes floatBlobs {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(70px, -60px) scale(1.15); }
+            66% { transform: translate(-50px, 50px) scale(0.9); }
+        }
+
+        /* --- HALAMAN LANDING (AWAL) --- */
+        .landing-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f7f9fa;
+            background-image: radial-gradient(rgba(129, 159, 127, 0.15) 1px, transparent 0);
+            background-size: 24px 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .landing-card {
+            background-color: #ffffff;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid rgba(0,0,0,0.02);
+            position: relative;
+            z-index: 1001;
+        }
+
+        .envelope-logo {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            animation: floatEnvelope 3s ease-in-out infinite;
+        }
+
+        @keyframes floatEnvelope {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .landing-card h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 0;
+            margin-bottom: 24px;
+        }
+
+        .btn-open {
+            background-color: #819f7f;
+            color: #ffffff;
+            border: none;
+            padding: 12px 30px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-open:hover {
+            background-color: #728f70;
+        }
+
+        /* --- KARTU UTAMA --- */
+        .card {
+            background-color: #ffffff;
+            max-width: 580px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.02);
+            display: none;
+            opacity: 0;
+            z-index: 10;
+        }
+
+        .card.show {
+            display: block;
+            animation: cardFadeUp 0.8s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+        }
+
+        @keyframes cardFadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .accent-line {
+            width: 50px;
+            height: 4px;
+            background-color: #819f7f;
+            border-radius: 2px;
+            margin-bottom: 24px;
+        }
+
+        .card h1 {
+            font-size: 34px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            row-gap: 8px;
+        }
+
+        .animated-item {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .card.show .word-1 { animation: fadeUpItem 0.5s ease forwards 0.4s; }
+        .card.show .word-2 { animation: fadeUpItem 0.5s ease forwards 0.6s; }
+        .card.show .hand-icon { animation: fadeUpItem 0.5s ease forwards 0.8s, floatHand 4s ease-in-out infinite 1.3s; }
+        .card.show .author { animation: fadeUpItem 0.5s ease forwards 1.0s; }
+        .card.show .message { animation: fadeUpItem 0.6s ease forwards 1.2s; }
+        .card.show .polaroid-section { animation: fadeUpItem 0.6s ease forwards 1.4s; }
+        .card.show .quote-container { animation: fadeUpItem 0.5s ease forwards 1.6s; }
+        .card.show .btn-action { animation: fadeUpItem 0.5s ease forwards 1.8s; }
+
+        @keyframes fadeUpItem {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatHand {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-4px) rotate(3deg); }
+        }
+
+        .hand-icon {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        .author {
+            font-family: 'Courier Prime', monospace;
+            font-weight: 700;
+            color: #7b9979;
+            font-size: 15px;
+            margin-bottom: 35px;
+            letter-spacing: 0.5px;
+        }
+
+        .message {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14.5px;
+            line-height: 1.7;
+            color: #334155;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        /* --- STYLE MULTIPLE POLAROIDS & SCRATCH EFFECT --- */
+        .polaroid-section {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            align-items: center;
+            margin: 40px auto;
+            position: relative;
+            width: 100%;
+        }
+
+        .polaroid-card {
+            background: #ffffff;
+            padding: 16px 16px 24px 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            border: 1px solid #f1f5f9;
+            width: 292px;
+        }
+
+        .pol-1 { transform: rotate(-3deg); }
+        .pol-2 { transform: rotate(4deg); }
+        .pol-3 { transform: rotate(-2deg); }
+
+        .polaroid-card:hover {
+            transform: rotate(0deg) scale(1.04);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+            z-index: 20;
+        }
+
+        /* Custom Push Pin Image */
+        .polaroid-pin {
+            width: 28px;
+            height: 28px;
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            background-image: url('https://em-content.zobj.net/source/apple/232/pushpin_1f4cc.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .polaroid-frame {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .scratch-container {
+            position: relative;
+            width: 260px;
+            height: auto;
+            overflow: hidden;
+            cursor: pointer;
+            background-color: #e2e8f0;
+        }
+
+        .polaroid-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .scratch-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            touch-action: none;
+        }
+
+        .polaroid-caption {
+            font-family: 'Courier Prime', monospace;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 15px;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .quote-container {
+            border-left: 2px solid #e2e8f0;
+            padding-left: 16px;
+            margin-bottom: 35px;
+            margin-top: 25px;
+        }
+
+        .quote-text {
+            font-family: 'Courier Prime', monospace;
+            font-style: italic;
+            font-size: 14.5px;
+            color: #475569;
+        }
+
+        .btn-action {
+            display: block;
+            width: 100%;
+            background-color: #819f7f;
+            color: #ffffff;
+            border: none;
+            padding: 14px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(129, 159, 127, 0.2);
+        }
+
+        .btn-action:hover { background-color: #728f70; }
+        .btn-action:active { transform: scale(0.96); }
+
+        /* Wadah untuk Efek Konfeti */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-20px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Wadah Efek Cahaya Berpendar -->
+    <div class="blob-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <!-- HALAMAN AWAL (LANDING PAGE) -->
+    <div class="landing-page" id="landingPage">
+        <div class="landing-card">
+            <img src="https://emojigraph.org/media/apple/envelope_2709-fe0f.png" alt="Envelope Logo" class="envelope-logo">
+            <h2>You received a message</h2>
+            <button class="btn-open" id="openBtn">Open Message</button>
+        </div>
+    </div>
+
+    <!-- Kontainer untuk menampung efek hujan konfeti saat tombol diklik -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <!-- KARTU UTAMA -->
+    <div class="card" id="mainCard">
+        <div class="accent-line"></div>
+        
+        <!-- Judul Utama -->
+        <h1>
+            <span class="animated-item word-1">Ellooou</span>&nbsp;
+            <span class="animated-item word-2">na(na)zka!</span>
+            <img src="https://em-content.zobj.net/source/apple/96/waving-hand-sign_1f44b.png" alt="Waving Hand" class="hand-icon animated-item">
+        </h1>
+        
+        <div class="author animated-item">From Devin - Anak Smandamaung</div>
+        
+        <!-- Pesan teks kustom untuk Nazka dengan Tanda Kutip -->
+        <div class="message animated-item">
+            "Congrats for the grads yP, also sblumnya mff ug tdk mere awk bouquet like u did in the previous year (mff asli ug tdk sempat membeli bouquet n apapun untuk siapapun), as my apologize i made this gRads card. Hope our memories would never getting fade away, dn yP i hope u enjoy growing on ur shs life wherever you are, keep in touch ypP! bingung bilang aplg,mkshudhbersediajdpartnerugyh."
+        </div>
+
+        <!-- SEKSI MULTIPLE POLAROIDS GOSOK (3 FOTO) -->
+        <div class="polaroid-section animated-item">
+            
+            <!-- Polaroid 1 -->
+            <div class="polaroid-card pol-1">
+                <div class="polaroid-pin"></div>
+                <div class="polaroid-frame">
+                    <div class="scratch-container">
+                        <img src="https://raw.githubusercontent.com/Dvnnjad4m/nazeka/1f8765bfd8efcd687d2d66bf01f7b4bd1796a863/20260607141708173.jpg" alt="Memory 1" class="polaroid-img" id="img1">
+                        <canvas class="scratch-canvas" id="canvas1"></canvas>
+                    </div>
+                    <div class="polaroid-caption">Memory #1</div>
+                </div>
+            </div>
+
+            <!-- Polaroid 2 -->
+            <div class="polaroid-card pol-2">
+                <div class="polaroid-pin"></div>
+                <div class="polaroid-frame">
+                    <div class="scratch-container">
+                        <img src="https://raw.githubusercontent.com/Dvnnjad4m/nazeka/1f8765bfd8efcd687d2d66bf01f7b4bd1796a863/20251110202450620.jpg" alt="Memory 2" class="polaroid-img" id="img2">
+                        <canvas class="scratch-canvas" id="canvas2"></canvas>
+                    </div>
+                    <div class="polaroid-caption">Memory #2</div>
+                </div>
+            </div>
+
+            <!-- Polaroid 3 -->
+            <div class="polaroid-card pol-3">
+                <div class="polaroid-pin"></div>
+                <div class="polaroid-frame">
+                    <div class="scratch-container">
+                        <img src="https://raw.githubusercontent.com/Dvnnjad4m/nazeka/1f8765bfd8efcd687d2d66bf01f7b4bd1796a863/20251110202450554.jpg" alt="Memory 3" class="polaroid-img" id="img3">
+                        <canvas class="scratch-canvas" id="canvas3"></canvas>
+                    </div>
+                    <div class="polaroid-caption">Memory #3</div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="quote-container animated-item">
+            <div class="quote-text">"The best is yet to come"</div>
+        </div>
+        
+        <button class="btn-action animated-item" id="makeItRainBtn">Celebrate!</button>
+    </div>
+
+    <script>
+        const openBtn = document.getElementById('openBtn');
+        const landingPage = document.getElementById('landingPage');
+        const mainCard = document.getElementById('mainCard');
+
+        // SFX Confetti
+        const newCelebrateAudio = new Audio('https://raw.githubusercontent.com/Dvnnjad4m/nazeka/ea25d47c48b7884030ac69406605c88722a6fcd3/Devin%20Arvinata%20Adam%20-%20confetti%20sfx%202026-06-06%2008_30.m4a');
+        newCelebrateAudio.volume = 0.65;
+
+        // BGM Baru dengan Fitur Kontrol Fade In, Fade Out & Loop Manual
+        const bgmAudio = new Audio('https://raw.githubusercontent.com/Dvnnjad4m/nazeka/df8d5e6f6270e327c709c1bcb1e7ef2636adfd9c/Devin%20Arvinata%20Adam%20-%20backsound%202026-06-07%2014_43.m4a');
+        
+        const FADE_DURATION = 3000; // Durasi fade (3 detik)
+        const TARGET_VOLUME = 0.5;   // Volume puncak backsound
+        
+        function fadeIn(audio) {
+            audio.volume = 0;
+            audio.play().catch(err => console.log("BGM play error:", err));
+            
+            let start = null;
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                let progress = timestamp - start;
+                audio.volume = Math.min((progress / FADE_DURATION) * TARGET_VOLUME, TARGET_VOLUME);
+                if (progress < FADE_DURATION) {
+                    window.requestAnimationFrame(step);
+                }
+            }
+            window.requestAnimationFrame(step);
+        }
+
+        function checkFadeOut() {
+            let timeLeft = (bgmAudio.duration - bgmAudio.currentTime) * 1000;
+            if (timeLeft <= FADE_DURATION && timeLeft > 0 && bgmAudio.volume > 0.01) {
+                bgmAudio.volume = Math.max((timeLeft / FADE_DURATION) * TARGET_VOLUME, 0);
+            }
+        }
+
+        bgmAudio.addEventListener('timeupdate', checkFadeOut);
+
+        bgmAudio.addEventListener('ended', () => {
+            bgmAudio.currentTime = 0;
+            fadeIn(bgmAudio);
+        });
+
+        openBtn.addEventListener('click', () => {
+            landingPage.style.opacity = '0';
+            landingPage.style.visibility = 'hidden';
+            mainCard.classList.add('show');
+            
+            newCelebrateAudio.load();
+            bgmAudio.load();
+            
+            fadeIn(bgmAudio);
+
+            setTimeout(() => {
+                initScratchCard('canvas1', 'img1');
+                initScratchCard('canvas2', 'img2');
+                initScratchCard('canvas3', 'img3');
+            }, 300);
+        });
+
+        // --- EFEK KONFETI TOMBOL ---
+        const button = document.getElementById('makeItRainBtn');
+        const container = document.getElementById('confettiContainer');
+        const colors = ['#819f7f', '#c084fc', '#fde047', '#67e8f9', '#f472b6'];
+
+        button.addEventListener('click', () => {
+            newCelebrateAudio.currentTime = 0;
+            newCelebrateAudio.play().catch(err => console.log("Audio play error:", err));
+            
+            for (let i = 0; i < 85; i++) {
+                createConfetti();
+            }
+        });
+
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            confetti.style.left = Math.random() * 100 + 'vw';
+            
+            const isSmall = Math.random() > 0.5;
+            const size = isSmall ? (Math.random() * 4 + 4) : (Math.random() * 5 + 9); 
+            confetti.style.width = size + 'px';
+            confetti.style.height = size + 'px';
+
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            const duration = Math.random() * 2 + 1.8;
+            confetti.style.animationDuration = duration + 's';
+            confetti.style.animationDelay = Math.random() * 0.4 + 's';
+
+            container.appendChild(confetti);
+
+            setTimeout(() => {
+                confetti.remove();
+            }, duration * 1000 + 300);
+        }
+
+        // --- LOGIKA MULTIPLE SCRATCH CARDS (GOSOK GAMBAR) ---
+        function initScratchCard(canvasId, imgId) {
+            const canvas = document.getElementById(canvasId);
+            const img = document.getElementById(imgId);
+            if (!canvas || !img) return;
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false;
+
+            const container = canvas.parentElement;
+            container.style.height = img.offsetHeight + 'px';
+
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            ctx.fillStyle = '#cbd5e1'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = '600 14px Inter';
+            ctx.fillStyle = '#64748b';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Scratch Here', canvas.width / 2, canvas.height / 2);
+
+            function scratch(e) {
+                if (!isDrawing) return;
+                
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                
+                if (!clientX || !clientY) return;
+
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
+
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x, y, 26, 0, Math.PI * 2); 
+                ctx.fill();
+            }
+
+            canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
+            canvas.addEventListener('mouseup', () => isDrawing = false);
+            canvas.addEventListener('mouseleave', () => isDrawing = false);
+            canvas.addEventListener('mousemove', scratch);
+
+            canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+            canvas.addEventListener('touchend', () => isDrawing = false);
+            canvas.addEventListener('touchmove', (e) => { scratch(e); e.preventDefault(); }, { passive: false });
+        }
+    </script>
+
+</body>
+</html>
